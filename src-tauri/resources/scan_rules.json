@@ -1,0 +1,278 @@
+{
+  "version": 1,
+  "platforms": {
+    "windows": {
+      "protected_paths": [
+        "C:\\Windows\\System32",
+        "C:\\Windows\\SysWOW64",
+        "C:\\Windows\\WinSxS",
+        "C:\\Program Files",
+        "C:\\Program Files (x86)",
+        "C:\\$WinREAgent"
+      ],
+      "rules": [
+        {
+          "id": "win-temp-user",
+          "category": "temp",
+          "label": "User TEMP",
+          "paths": ["%TEMP%"],
+          "risk": "safe",
+          "min_age_days": 1,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true
+        },
+        {
+          "id": "win-temp-system",
+          "category": "temp",
+          "label": "Windows Temp",
+          "paths": ["C:\\Windows\\Temp"],
+          "risk": "caution",
+          "min_age_days": 1,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true
+        },
+        {
+          "id": "win-recycle-bin",
+          "category": "recycle_bin",
+          "label": "Recycle Bin",
+          "paths": ["C:\\$Recycle.Bin"],
+          "risk": "caution",
+          "min_age_days": 0,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true
+        },
+        {
+          "id": "win-update-download",
+          "category": "updates",
+          "label": "Windows Update Download Cache",
+          "paths": ["C:\\Windows\\SoftwareDistribution\\Download"],
+          "risk": "caution",
+          "min_age_days": 7,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true
+        },
+        {
+          "id": "win-windows-old",
+          "category": "system",
+          "label": "Previous Windows Installation (Windows.old)",
+          "paths": ["C:\\Windows.old"],
+          "risk": "risky",
+          "min_age_days": 0,
+          "deletable": false,
+          "informational_only": true,
+          "recursive": true,
+          "cleanup_hint": "Use Disk Cleanup (Cleanmgr) or Settings → System → Storage to remove Windows.old safely."
+        },
+        {
+          "id": "win-browser-caches",
+          "category": "app_caches",
+          "label": "LocalAppData browser & app caches",
+          "paths": [
+            "%LOCALAPPDATA%\\Temp",
+            "%LOCALAPPDATA%\\npm-cache",
+            "%LOCALAPPDATA%\\pip\\Cache",
+            "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Cache",
+            "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Cache",
+            "%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles"
+          ],
+          "risk": "safe",
+          "min_age_days": 3,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true
+        },
+        {
+          "id": "win-gradle-caches",
+          "category": "package_managers",
+          "label": "Gradle caches",
+          "paths": ["%USERPROFILE%\\.gradle\\caches"],
+          "risk": "safe",
+          "min_age_days": 7,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true,
+          "cleanup_hint": "Prefer: gradle --stop && remove caches via IDE settings when possible."
+        },
+        {
+          "id": "win-downloads",
+          "category": "downloads",
+          "label": "User Downloads folder",
+          "paths": ["%USERPROFILE%\\Downloads"],
+          "risk": "caution",
+          "min_age_days": 90,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": false,
+          "list_children": true
+        },
+        {
+          "id": "win-build-artifacts",
+          "category": "build_artifacts",
+          "label": "Stale build output folders",
+          "paths": [
+            "%USERPROFILE%\\Documents",
+            "%USERPROFILE%\\Desktop",
+            "%USERPROFILE%\\source",
+            "%USERPROFILE%\\Sources",
+            "%USERPROFILE%\\Projects",
+            "%USERPROFILE%\\dev",
+            "%USERPROFILE%\\code",
+            "%USERPROFILE%\\GitHub"
+          ],
+          "risk": "caution",
+          "min_age_days": 60,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true,
+          "match_dir_names": ["bin", "obj", "build", "dist", ".next", "__pycache__", "node_modules"],
+          "max_depth": 6,
+          "skip_dir_names": [".git", "AppData", "node_modules"]
+        },
+        {
+          "id": "win-docker",
+          "category": "docker",
+          "label": "Docker disk usage (CLI)",
+          "paths": [],
+          "risk": "caution",
+          "min_age_days": 0,
+          "deletable": false,
+          "informational_only": true,
+          "recursive": false,
+          "tool": "docker",
+          "cleanup_hint": "Use: docker system prune / docker image prune / docker builder prune — never delete Docker's internal storage files directly."
+        }
+      ]
+    },
+    "linux": {
+      "protected_paths": [
+        "/",
+        "/bin",
+        "/sbin",
+        "/usr",
+        "/lib",
+        "/lib64",
+        "/boot",
+        "/etc",
+        "/dev",
+        "/proc",
+        "/sys",
+        "/root",
+        "/var/lib"
+      ],
+      "rules": [
+        {
+          "id": "linux-tmp",
+          "category": "temp",
+          "label": "Temporary directories",
+          "paths": ["/tmp", "/var/tmp"],
+          "risk": "safe",
+          "min_age_days": 1,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true
+        },
+        {
+          "id": "linux-user-cache",
+          "category": "app_caches",
+          "label": "User cache (~/.cache)",
+          "paths": ["~/.cache"],
+          "risk": "safe",
+          "min_age_days": 3,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true
+        },
+        {
+          "id": "linux-apt-archives",
+          "category": "package_managers",
+          "label": "APT package archives",
+          "paths": ["/var/cache/apt/archives"],
+          "risk": "safe",
+          "min_age_days": 0,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true,
+          "cleanup_hint": "Prefer: sudo apt-get clean"
+        },
+        {
+          "id": "linux-npm-pip-yarn",
+          "category": "package_managers",
+          "label": "npm / pip / yarn caches",
+          "paths": ["~/.npm/_cacache", "~/.cache/pip", "~/.cache/yarn"],
+          "risk": "safe",
+          "min_age_days": 7,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true,
+          "cleanup_hint": "Prefer: npm cache clean --force / pip cache purge / yarn cache clean"
+        },
+        {
+          "id": "linux-stale-node-modules",
+          "category": "build_artifacts",
+          "label": "Stale node_modules & build folders",
+          "paths": ["~/Documents", "~/Desktop", "~/Projects", "~/dev", "~/code", "~/src", "~/GitHub"],
+          "risk": "caution",
+          "min_age_days": 90,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true,
+          "match_dir_names": ["node_modules", "dist", ".next", "__pycache__"],
+          "max_depth": 6,
+          "skip_dir_names": [".git", "node_modules"]
+        },
+        {
+          "id": "linux-var-log",
+          "category": "logs",
+          "label": "System logs (/var/log)",
+          "paths": ["/var/log"],
+          "risk": "caution",
+          "min_age_days": 14,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": true
+        },
+        {
+          "id": "linux-old-kernels",
+          "category": "system",
+          "label": "Old kernels (informational)",
+          "paths": ["/boot"],
+          "risk": "risky",
+          "min_age_days": 0,
+          "deletable": false,
+          "informational_only": true,
+          "recursive": false,
+          "cleanup_hint": "Remove old kernels via: sudo apt autoremove — do not delete kernel files directly."
+        },
+        {
+          "id": "linux-downloads",
+          "category": "downloads",
+          "label": "User Downloads folder",
+          "paths": ["~/Downloads"],
+          "risk": "caution",
+          "min_age_days": 90,
+          "deletable": true,
+          "informational_only": false,
+          "recursive": false,
+          "list_children": true
+        },
+        {
+          "id": "linux-docker",
+          "category": "docker",
+          "label": "Docker disk usage (CLI)",
+          "paths": [],
+          "risk": "caution",
+          "min_age_days": 0,
+          "deletable": false,
+          "informational_only": true,
+          "recursive": false,
+          "tool": "docker",
+          "cleanup_hint": "Use: docker system prune / docker image prune / docker builder prune — never delete Docker's internal storage files directly."
+        }
+      ]
+    }
+  }
+}
